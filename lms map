@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>map</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+        integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+        crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+        integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+        crossorigin=""></script>
+    <style>
+        #map {
+            height: 650px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="map"></div>
+    <script>
+        var map = L.map('map').setView([27.55828395776419, 68.20439344497748], 13);
+        L.tileLayer(
+            'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiaGFkaWJ1eG1haGVzc2FyIiwiYSI6ImNrem1tb2I5bjAwN2kycm56OHpnem14YWIifQ.No5074iJtiwQYu4OjNFXew', {
+            attribution: 'Map data &copy; <a href="https://hadibuxm.github.io">hehehe</a>',
+            maxZoom: 18,
+            id: 'mapbox/streets-v11',
+            tileSize: 512,
+            zoomOffset: -1,
+            accessToken: 'your.mapbox.access.token'
+        }).addTo(map);
+        $.ajax({
+            type: 'GET',
+            url: '/api/resource/testmap?fields=["name", "latitude", "longitude"]',
+            success: function (response) {
+                response.data.forEach(location => {
+                    var temp_anchor ='<a href="http://lms.site:8000/app/testmap/'+location.name+'">'+location.name+"</a>"; 
+                    marker = L.marker([location.latitude, location.longitude]).addTo(map);
+                    marker.bindPopup(temp_anchor);                 
+                });
+            }
+        })
+        
+    </script>
+</body>
+
+</html>
